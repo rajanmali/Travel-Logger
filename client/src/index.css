@@ -8,8 +8,32 @@ body {
 }
 
 .popup-card {
-  width: 40vw;
+  width: 30vw;
   margin: 0.5rem;
+  margin-top: 2rem;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-details {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-image {
+  height: 300px;
+  width: auto;
+  text-align: center;
+  margin: 0 auto;
+  display: block;
+}
+
+.mapboxgl-popup-close-button {
+  font-size: 2rem !important;
 }
 
 .entry-form label,
@@ -26,4 +50,8 @@ body {
   margin-top: 2rem;
   font-size: 1.5rem;
   padding: 0.5rem;
+}
+
+.error {
+  color: #f05305;
 }

@@ -16,21 +16,23 @@ router.post('/', async (req, res, next) => {
   try {
     const logEntry = new LogEntry(req.body);
     const createdEntry = await logEntry.save();
-    res.json(createdEntry);
+    res.json({ ...createdEntry, message: 'Created new log entry.' });
   } catch (error) {
     if (error.name === 'ValidationError') {
       res.status(422);
     }
-    next(error);
+    next({ ...error, message: 'Log could not be created.' });
   }
 });
 
 router.delete('/', async (req, res, next) => {
   try {
-    const deletRes = await LogEntry.deleteOne({ _id: req.body.id });
-    res.json({ ...deletRes, message: 'Log has been deleted' });
+    const deletRes = await LogEntry.find({ _id: req.body.id }).deleteOne({
+      _id: req.body.id,
+    });
+    res.json({ ...deletRes, message: 'Log has been deleted.' });
   } catch (error) {
-    next(error);
+    next({ ...error, message: 'Log could not be deleted.' });
   }
 });
 

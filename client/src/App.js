@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactMapGL from 'react-map-gl';
+import { ToastProvider } from 'react-toast-notifications';
 
 import { listLogEntries } from './API';
 import {
@@ -21,17 +22,25 @@ export default function App() {
     zoom: 3,
     overflow: 'hidden',
   });
-
   const [logEntries, setLogEntries] = useState([]);
   const [showPopup, setShowPopup] = useState({});
   const [addEntryLocation, setAddEntryLocation] = useState({});
 
   useEffect(() => {
-    (async () => {
-      const logEntries = await listLogEntries();
-      setLogEntries(logEntries);
+    (() => {
+      getEntries();
     })();
   }, []);
+
+  const getEntries = async () => {
+    const logEntries = await listLogEntries();
+    setLogEntries(logEntries);
+  };
+
+  const onSuccessfulEntry = () => {
+    closeAddNewEntryPopUp();
+    getEntries();
+  };
 
   const closeVisitedPopUp = () => {
     setShowPopup({});
@@ -61,37 +70,41 @@ export default function App() {
   };
 
   return (
-    <ReactMapGL
-      {...viewport}
-      mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-      onViewportChange={(nextViewport) => setViewport(nextViewport)}
-      onClick={closeOpenPopUps}
-      onDblClick={showAddMarkerPopUp}
-      mapStyle={darkModeToggle ? darkModeStyleUrl : lightModeStyleUrl}
-      doubleClickZoom={false}
-    >
-      {logEntries?.[0] &&
-        logEntries.map((entry) => {
-          return (
-            <VisitedMarker
-              entry={entry}
-              showPopup={showPopup}
-              showPopUpForVisitedMarker={showPopUpForVisitedMarker}
-              closeVisitedPopUp={closeVisitedPopUp}
-              key={entry._id}
-            >
-              <MarkerSVG viewport={viewport} />
-            </VisitedMarker>
-          );
-        })}
-      {Object.keys(addEntryLocation).length > 0 && (
-        <NewMarker
-          addEntryLocation={addEntryLocation}
-          closeAddNewEntryPopUp={closeAddNewEntryPopUp}
-        >
-          <MarkerSVG viewport={viewport} altStroke={true} />
-        </NewMarker>
-      )}
-    </ReactMapGL>
+    <ToastProvider autoDismiss={true}>
+      <ReactMapGL
+        {...viewport}
+        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+        onViewportChange={(nextViewport) => setViewport(nextViewport)}
+        onClick={closeOpenPopUps}
+        onDblClick={showAddMarkerPopUp}
+        mapStyle={darkModeToggle ? darkModeStyleUrl : lightModeStyleUrl}
+        doubleClickZoom={false}
+      >
+        {logEntries?.[0] &&
+          logEntries.map((entry) => {
+            return (
+              <VisitedMarker
+                key={entry._id}
+                entry={entry}
+                showPopup={showPopup}
+                showPopUpForVisitedMarker={showPopUpForVisitedMarker}
+                closeVisitedPopUp={closeVisitedPopUp}
+                onSuccessfulEntry={onSuccessfulEntry}
+              >
+                <MarkerSVG viewport={viewport} />
+              </VisitedMarker>
+            );
+          })}
+        {Object.keys(addEntryLocation).length > 0 && (
+          <NewMarker
+            addEntryLocation={addEntryLocation}
+            closeAddNewEntryPopUp={closeAddNewEntryPopUp}
+            onSuccessfulEntry={onSuccessfulEntry}
+          >
+            <MarkerSVG viewport={viewport} altStroke={true} />
+          </NewMarker>
+        )}
+      </ReactMapGL>
+    </ToastProvider>
   );
 }

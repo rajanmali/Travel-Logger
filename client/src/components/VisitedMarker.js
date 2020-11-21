@@ -1,3 +1,4 @@
+import React from 'react';
 import { Marker } from 'react-map-gl';
 import PopUpToolTip from './PopUpToolTip';
 import PopUpCard from './PopUpCard';
@@ -8,8 +9,9 @@ const VisitedMarker = ({
   showPopup,
   showPopUpForVisitedMarker,
   closeVisitedPopUp,
+  onSuccessfulEntry,
 }) => (
-  <div key={entry._id}>
+  <React.Fragment key={entry._id}>
     <Marker latitude={entry.latitude} longitude={entry.longitude}>
       <div
         onClick={() => {
@@ -22,10 +24,10 @@ const VisitedMarker = ({
     </Marker>
     {showPopup[entry._id] && (
       <PopUpToolTip data={entry} closeVisitedPopUp={closeVisitedPopUp}>
-        <PopUpCard entry={entry} />
+        <PopUpCard entry={entry} onSuccessfulEntry={onSuccessfulEntry} />
       </PopUpToolTip>
     )}
-  </div>
+  </React.Fragment>
 );
 
 export default VisitedMarker;

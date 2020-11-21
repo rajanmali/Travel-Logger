@@ -3,7 +3,12 @@ import { Marker } from 'react-map-gl';
 import LogEntryForm from './LogEntryForm';
 import PopUpToolTip from './PopUpToolTip';
 
-const NewMarker = ({ children, addEntryLocation, closeAddNewEntryPopUp }) => (
+const NewMarker = ({
+  children,
+  addEntryLocation,
+  closeAddNewEntryPopUp,
+  onSuccessfulEntry,
+}) => (
   <>
     <Marker
       latitude={addEntryLocation.latitude}
@@ -16,7 +21,11 @@ const NewMarker = ({ children, addEntryLocation, closeAddNewEntryPopUp }) => (
       data={addEntryLocation}
       closeAddNewEntryPopUp={closeAddNewEntryPopUp}
     >
-      <LogEntryForm />
+      <h3>Add your log entry here</h3>
+      <LogEntryForm
+        {...addEntryLocation}
+        onSuccessfulEntry={onSuccessfulEntry}
+      />
     </PopUpToolTip>
   </>
 );
