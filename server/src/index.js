@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const middlewares = require('./middlewares');
-const logs = require('../api/logs');
+const router = require('../api/logs');
 
 mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
   res.json({ message: 'Hello World' });
 });
 
-app.use('/api/logs', logs);
+app.use('/api/logs', router);
 
 app.use(middlewares.notFound);
 
