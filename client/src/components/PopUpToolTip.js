@@ -16,7 +16,7 @@ const PopUpToolTip = ({
       onClose={form ? closeAddNewEntryPopUp : closeVisitedPopUp}
       anchor="top"
     >
-      {children}
+      <div className="popup-card">{children}</div>
     </Popup>
   );
 };
