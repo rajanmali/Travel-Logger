@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "Travel-Logger",
   "builds": [
     {
       "src": "src/index.js",
@@ -14,13 +13,13 @@
     }
   ],
   "alias": [
-    "Travel-Logger"
+    "travel-logger-rajanmali"
   ],
   "env": {
     "NODE_ENV": "production",
     "PORT": "1337",
     "DATABASE_URL": "@travel-logger-db",
-    "CORS_ORIGIN": "https://travel-logger.rajanmali.vercel.app",
+    "CORS_ORIGIN": "https://travel-logger.rajanmali.vercel.app/api/logs",
     "API_KEY": "@travel-logger-api-key"
   }
 }
