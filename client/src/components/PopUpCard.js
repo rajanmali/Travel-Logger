@@ -1,15 +1,25 @@
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useToasts } from 'react-toast-notifications';
+
 import { deleteLogEntry } from '../API';
 
 const PopUpCard = ({ entry, onSuccessfulEntry }) => {
+  const [toggleDelete, setToggleDelete] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [deleteID, setDeleteID] = useState('');
+
+  const { register, handleSubmit } = useForm();
   const { addToast } = useToasts();
 
-  const handlePostDelete = async (id) => {
+  const handlePostDelete = async (data) => {
     try {
-      const response = await deleteLogEntry({ id });
+      setLoading(true);
+      const response = await deleteLogEntry({ id: deleteID, ...data });
       onSuccessfulEntry();
       addToast(response.message, { appearance: 'success' });
     } catch (error) {
+      setLoading(false);
       addToast(error.message, { appearance: 'error' });
     }
   };
@@ -25,7 +35,33 @@ const PopUpCard = ({ entry, onSuccessfulEntry }) => {
           Visited On:&nbsp;
           <em>{new Date(entry.visitDate).toLocaleDateString()}</em>
         </p>
-        <button onClick={() => handlePostDelete(entry._id)}>Delete Log</button>
+        {toggleDelete && (
+          <>
+            <form
+              className="entry-form"
+              onSubmit={handleSubmit(handlePostDelete)}
+            >
+              <label htmlFor="apiKey">API Key:&nbsp;</label>
+              <input
+                type="password"
+                name="apiKey"
+                ref={register}
+                disabled={loading}
+                required
+                aria-required
+              />
+              <button>Confirm</button>
+            </form>
+          </>
+        )}
+        <button
+          onClick={() => {
+            setDeleteID(entry._id);
+            setToggleDelete(true);
+          }}
+        >
+          Delete Log
+        </button>
       </div>
     </>
   );

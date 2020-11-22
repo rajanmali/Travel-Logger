@@ -13,13 +13,17 @@ const LogEntryForm = ({ longitude, latitude, onSuccessfulEntry }) => {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
+
       data.latitude = latitude;
       data.longitude = longitude;
+
       const created = await createLogEntry(data);
       addToast(created.message, { appearance: 'success' });
+
       onSuccessfulEntry();
     } catch (error) {
       setError(error.message);
+      addToast(error.message, { appearance: 'error' });
       setLoading(false);
     }
   };
@@ -31,6 +35,15 @@ const LogEntryForm = ({ longitude, latitude, onSuccessfulEntry }) => {
       <input
         type="text"
         name="title"
+        ref={register}
+        disabled={loading}
+        required
+        aria-required
+      />
+      <label htmlFor="apiKey">API Key:&nbsp;</label>
+      <input
+        type="password"
+        name="apiKey"
         ref={register}
         disabled={loading}
         required
@@ -61,7 +74,7 @@ const LogEntryForm = ({ longitude, latitude, onSuccessfulEntry }) => {
         ref={register}
         disabled={loading}
       />
-      <button disabled={loading}>
+      <button disabled={loading} className="submit-button">
         {loading ? 'Loading...' : 'Register Travel Log'}
       </button>
     </form>

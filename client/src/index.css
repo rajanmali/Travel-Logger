@@ -45,7 +45,7 @@ body {
   width: 100%;
 }
 
-.entry-form button {
+.entry-form submit-button {
   margin-top: 2rem;
   font-size: 1.5rem;
   padding: 0.5rem;

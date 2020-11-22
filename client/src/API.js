@@ -6,23 +6,46 @@ export const listLogEntries = async () => {
 };
 
 export const createLogEntry = async (entry) => {
+  const { apiKey } = entry;
+  delete entry.apiKey;
   const response = await fetch(`${API_URL}/api/logs`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
+      'X-API-KEY': apiKey,
     },
     body: JSON.stringify(entry),
   });
-  return response.json();
+  const json = await response.json();
+
+  if (response.ok) {
+    return json;
+  }
+
+  const error = new Error(json.message);
+  error.response = json;
+  throw error;
 };
 
 export const deleteLogEntry = async (data) => {
+  const { apiKey } = data;
+  delete data.apiKey;
+
   const response = await fetch(`${API_URL}/api/logs`, {
     method: 'DELETE',
     headers: {
       'content-type': 'application/json',
+      'X-API-KEY': apiKey,
     },
     body: JSON.stringify(data),
   });
-  return response.json();
+  const json = await response.json();
+
+  if (response.ok) {
+    return json;
+  }
+
+  const error = new Error(json.message);
+  error.response = json;
+  throw error;
 };

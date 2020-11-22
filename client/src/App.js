@@ -38,6 +38,7 @@ export default function App() {
   };
 
   const onSuccessfulEntry = () => {
+    closeVisitedPopUp();
     closeAddNewEntryPopUp();
     getEntries();
   };
@@ -55,7 +56,7 @@ export default function App() {
     closeAddNewEntryPopUp();
   };
 
-  const closeOpenPopUps = () => {
+  const closeAllOpenPopUps = () => {
     Object.keys(showPopup).length > 0 && closeVisitedPopUp();
     Object.keys(addEntryLocation).length > 0 && closeAddNewEntryPopUp();
   };
@@ -75,7 +76,7 @@ export default function App() {
         {...viewport}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
         onViewportChange={(nextViewport) => setViewport(nextViewport)}
-        onClick={closeOpenPopUps}
+        onClick={closeAllOpenPopUps}
         onDblClick={showAddMarkerPopUp}
         mapStyle={darkModeToggle ? darkModeStyleUrl : lightModeStyleUrl}
         doubleClickZoom={false}
