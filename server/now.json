@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "name": "Travel-Logger",
+  "builds": [
+    {
+      "src": "src/index.js",
+      "use": "@now/node-server"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/.*",
+      "dest": "src/index.js"
+    }
+  ],
+  "alias": [
+    "Travel-Logger"
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "PORT": "1337",
+    "DATABASE_URL": "@travel-logger-db",
+    "CORS_ORIGIN": "http://localhost:3000",
+    "API_KEY": "@travel-logger-api-key"
+  }
+}
