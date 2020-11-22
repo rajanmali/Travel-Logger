@@ -56,11 +56,16 @@ const PopUpCard = ({ entry, onSuccessfulEntry }) => {
         )}
         <button
           onClick={() => {
-            setDeleteID(entry._id);
-            setToggleDelete(true);
+            if (toggleDelete) {
+              setDeleteID('');
+              setToggleDelete(false);
+            } else {
+              setDeleteID(entry._id);
+              setToggleDelete(true);
+            }
           }}
         >
-          Delete Log
+          {toggleDelete ? 'Cancel' : 'Delete Log'}
         </button>
       </div>
     </>
